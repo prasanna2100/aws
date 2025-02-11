@@ -1,0 +1,48 @@
+Project 2: 
+Title : Medicine Cabinet
+Pillar: BDS (Brand Drug Solutions)
+
+
+  🪖LP: Customer Obsession:
+The primary goal was to enhance the Medicine Cabinet feature to provide GoodRx users with accurate information on brand drug savings. This focus on improving user experience and enabling better medication management demonstrates a deep commitment to understanding and meeting customer needs.
+
+
+1. Automating Data Movement from DynamoDB to Redshift
+⭐ Situation:
+GoodRx aimed to enhance its Medicine Cabinet feature to provide users with accurate information on brand drug savings. This required integrating Medicine Cabinet data into the data warehouse (Redshift) for advanced analytics and reporting.
+The nested JSON structure of Medicine Cabinet data from DynamoDB posed challenges for direct analytics and reporting in Redshift.
+Continuous data growth in DynamoDB (76 GB) necessitated an efficient approach to data extraction to avoid redundant processing and optimize resource usage.
+
+
+🎯Task:
+Automate the daily data movement from DynamoDB to Redshift to ensure up-to-date insights into brand drug savings, user behavior, and prescription adherence.
+Transforming  complex JSON data into a relational format suitable for analytics, ensuring accuracy and performance in reporting tools like Looker.
+Designed an incremental data extraction strategy leveraging transaction_logtime in DynamoDB for potential incremental extraction, while proposing a future-ready design that incorporates change data capture (CDC) techniques to optimize data load times and reduce system overhead.
+Automate Retry Mechanism (airflow).
+Checkpoint proposal
+
+
+
+
+
+
+⚙️Action:
+Designed and implemented an Apache Airflow DAG to automate data workflows.
+Developed a Python-based AWS Lambda function to trigger DynamoDB exports to S3, monitor export status, and load data into Redshift using the COPY command.
+Utilized DynamoToS3Operator to export data in PARQUET format for efficient processing.
+Applied PostgresOperator to bulk-load data into Redshift staging tables.
+Integrated PostGresSQL function  to transform nested JSON data using JSON_EXTRACT, ensuring data readiness for analytics.
+Utilized PostgreSQL functions like JSON_EXTRACT_PATH_TEXT to normalize data.
+Developed SQL scripts to efficiently aggregate key metrics such as total brand drugs saved, user engagement rates, and click-through rates (CTR).
+Used Protegrity Function to Mask the Pii information while loading Redshift.
+Comparing source and target record counts post-load to ensure completeness utilizing AUDIT TABLES 
+Implemented  Great Expectation  rules to verify data formats, null checks, and referential integrity.
+Configured Airflow tasks with built-in retry logic to automatically reattempt failed data load operations caused by transient errors such as network interruptions, temporary service outages, or resource contention. 
+
+
+🚀 Result:
+Achieved seamless daily data refresh in Redshift, enhancing data accuracy and timeliness.
+Enabled GoodRx to identify that users with at least one brand drug in their Medicine Cabinet average 1.78 brand drugs, compared to an overall average of 0.51.
+Contributed to a ~19K monthly increase in brand price page unique views, driving higher user engagement and brand drug claims.
+Provided actionable insights, showing that engaged users are 4X more likely to claim prescriptions and have over 40% more prescriptions filled within six months.
+Enhanced data reliability, supporting strategic initiatives like POS rebate integrations and adherence visualizations.
